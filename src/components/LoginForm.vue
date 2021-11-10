@@ -25,7 +25,7 @@
 
 <script>
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 export default {
   data() {
     return {
@@ -38,26 +38,32 @@ export default {
     async login(e) {
       try {
         e.preventDefault();
-        console.log(jwt.sign({teste: 'bla'}, process.env.VUE_APP_JWT_SECRET))
-        const auth = getAuth();
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          this.username,
-          this.password
-        );
-        const user = userCredential.user;
-        const localStorage = window.localStorage;
-        console.log(user)
-        const token = jwt.sign(user, process.env.VUE_APP_JWT_SECRET);
-        console.log('token: ', token)
-        localStorage.setItem("accessToken", user.accessToken);
-        localStorage.setItem("token", token)
-        this.$router.push("/admin/dashboard");
+        const { auth, userCredential } = await this.signInFirebase();
+        this.settingToLocalStorage(userCredential);
       } catch (error) {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error("Error: ", errorCode, errorMessage);
       }
+    },
+    async signInFirebase() {
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        this.username,
+        this.password
+      );
+      return {
+        auth,
+        userCredential,
+      };
+    },
+
+    settingToLocalStorage(userCredential) {
+      const user = userCredential.user;
+      const localStorage = window.localStorage;
+      localStorage.setItem("accessToken", user.accessToken);
+      this.$router.push("/admin/dashboard");
     },
   },
 };

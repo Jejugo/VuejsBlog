@@ -19,7 +19,7 @@ export default {
   display: flex;
   justify-content: center;
   &__login-form {
-    width: 15vw;
+    width: 20vw;
     height: 35vh;
 
     padding: 0 20px;
@@ -36,7 +36,7 @@ export default {
       padding: 5px 10px;
       border: none;
       border-radius: 5px;
-      width: 80%;
+      width: 100%;
       border-bottom: 1px solid #ddd;
       outline: none;
       font-size: $MEDIUM;
